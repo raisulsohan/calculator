@@ -4,6 +4,7 @@ let num = "";
 let operator = "";
 let displayCalc = document.getElementById("displayOperator");
 let displayResult = document.getElementById("display");
+let lastActionWasCalculation = false;
 
 function updateDisplay(){
     displayCalc.innerText = input;
@@ -17,19 +18,22 @@ function clearDisplay(){
 }
 
 function numInput(value){
-    const lastInput = isOperator(input.charAt(input.length - 1));
 
-    if (value === '.' && input.includes('.') && !lastInput) {
-        return;
+    if (lastActionWasCalculation) {
+        input = "";
+        lastActionWasCalculation = false; 
     }
+
+    const lastInput = isOperator(input.charAt(input.length - 1));
 
     if (!lastInput || !isOperator(value)){
         num = value;
         input += value;
-        result = '';
+        result = ''; 
         updateDisplay();
     }
 }
+
 
 function newValue(){
     input = '';
@@ -60,10 +64,10 @@ function setOperator(value){
 
 function calculate(){
     if (num && operator !== ""){
-        result = eval(input);
-        input = "";
+        result = eval(input).toString(); 
+        lastActionWasCalculation = true;
         updateDisplay();
-        } 
+    } 
 }
 
 function percent(){
